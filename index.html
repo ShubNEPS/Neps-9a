@@ -1,217 +1,296 @@
-           <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NEPS 9A Mega</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>NEPS 9A - Teacher Allot System</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
-        body { -webkit-tap-highlight-color: transparent; scroll-behavior: smooth; }
-        .tab-content { display: none; }
-        .tab-content.active { display: block; animation: fadeInUp 0.4s ease-out; }
-        @keyframes fadeInUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
-        .chat-bubble { border-radius: 18px; padding: 10px 14px; margin-bottom: 8px; max-width: 85%; }
+        body { -webkit-tap-highlight-color: transparent; overflow: hidden; height: 100vh; background: #f8fafc; }
+        .tab-content { display: none; height: 100%; width: 100%; position: absolute; top: 0; left: 0; background: white; overflow-y: auto; padding-bottom: 120px; }
+        .tab-content.active { display: flex; flex-direction: column; z-index: 10; }
+        .nav-active { color: #4f46e5 !important; border-top: 3px solid #4f46e5; background: #f5f3ff; }
+        
+        .modal-overlay { display: none; position: fixed; inset: 0; background: #0f172a; z-index: 1000; align-items: center; justify-content: center; flex-direction: column; padding: 20px; }
+        .modal-active { display: flex !important; }
+        
+        .pin-dot { width: 12px; height: 12px; border-radius: 50%; border: 2px solid #6366f1; transition: all 0.2s; }
+        .pin-dot.filled { background: #6366f1; transform: scale(1.2); }
+        .num-btn { width: 65px; height: 65px; border-radius: 50%; background: rgba(255,255,255,0.05); color: white; font-size: 20px; font-weight: 900; display: flex; items-center; justify-content: center; border: 1px solid rgba(255,255,255,0.1); }
+        .num-btn:active { background: #6366f1; }
+        
+        ::-webkit-scrollbar { width: 0px; background: transparent; }
     </style>
 </head>
-<body class="bg-slate-100 font-sans antialiased text-slate-900">
+<body class="font-sans text-slate-900">
 
-    <div class="max-w-md mx-auto min-h-screen bg-white shadow-2xl flex flex-col relative overflow-hidden">
+    <div class="max-w-md mx-auto h-screen flex flex-col bg-white shadow-2xl relative overflow-hidden">
         
-        <!-- HEADER -->
-        <header class="p-5 bg-white border-b flex justify-between items-center sticky top-0 z-50">
-            <div>
-                <h1 class="text-xl font-black text-indigo-600 italic tracking-tighter">NEPS 9A</h1>
-                <p id="role-text" class="text-[9px] font-bold text-slate-400 uppercase tracking-widest">Student Portal</p>
+        <!-- LOGIN SCREEN -->
+        <div id="login-modal" class="modal-overlay modal-active">
+            <div class="w-full max-w-xs text-center">
+                <div class="text-5xl mb-6">🏫</div>
+                <h2 class="text-white font-black text-2xl italic">NEPS 9A Portal</h2>
+                <p class="text-indigo-400 text-[10px] font-black uppercase tracking-[0.2em] mt-2 mb-10">Class Management</p>
+                <div class="space-y-4">
+                    <input id="reg-name" type="text" placeholder="Full Name" class="w-full bg-slate-800 border-none p-5 rounded-[20px] text-white font-bold outline-none focus:ring-2 focus:ring-indigo-500">
+                    <input id="reg-roll" type="number" placeholder="Roll No / ID" class="w-full bg-slate-800 border-none p-5 rounded-[20px] text-white font-bold outline-none focus:ring-2 focus:ring-indigo-500">
+                    <button onclick="saveStudentProfile()" class="w-full bg-indigo-600 text-white py-5 rounded-[20px] font-black text-xs uppercase tracking-widest shadow-lg">Enter Classroom</button>
+                </div>
             </div>
-            <button onclick="unlockTeacher()" class="w-10 h-10 bg-slate-50 border border-slate-200 rounded-xl flex items-center justify-center text-slate-400 active:bg-indigo-600 active:text-white transition-all">
-                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10"/></svg>
-            </button>
+        </div>
+
+        <!-- TEACHER PIN OVERLAY (The Allot Entrance) -->
+        <div id="pin-overlay" class="modal-overlay">
+            <h2 class="text-white font-black text-xl mb-2 italic">ALLOT ACCESS</h2>
+            <p class="text-slate-500 text-[9px] font-bold uppercase mb-8">Enter Teacher Security Code</p>
+            <div class="flex gap-4 mb-10">
+                <div class="pin-dot" id="dot-0"></div><div class="pin-dot" id="dot-1"></div>
+                <div class="pin-dot" id="dot-2"></div><div class="pin-dot" id="dot-3"></div>
+            </div>
+            <div class="grid grid-cols-3 gap-4">
+                <button onclick="pressPin('1')" class="num-btn">1</button><button onclick="pressPin('2')" class="num-btn">2</button><button onclick="pressPin('3')" class="num-btn">3</button>
+                <button onclick="pressPin('4')" class="num-btn">4</button><button onclick="pressPin('5')" class="num-btn">5</button><button onclick="pressPin('6')" class="num-btn">6</button>
+                <button onclick="pressPin('7')" class="num-btn">7</button><button onclick="pressPin('8')" class="num-btn">8</button><button onclick="pressPin('9')" class="num-btn">9</button>
+                <button onclick="closePin()" class="text-slate-500 font-black text-[10px] uppercase">Cancel</button>
+                <button onclick="pressPin('0')" class="num-btn">0</button>
+            </div>
+        </div>
+
+        <!-- HEADER -->
+        <header class="p-4 border-b flex justify-between items-center bg-white z-[100]">
+            <div class="flex items-center gap-3">
+                <div id="user-initial" class="w-10 h-10 bg-indigo-600 text-white rounded-2xl flex items-center justify-center font-black text-sm">?</div>
+                <div>
+                    <h1 id="user-display-name" class="text-sm font-black text-slate-800 leading-none">User</h1>
+                    <p id="role-text" class="text-[9px] font-bold text-slate-400 uppercase mt-1 tracking-wider">NEPS Student</p>
+                </div>
+            </div>
+            <div id="admin-badge" class="hidden px-3 py-1 bg-emerald-500 text-white text-[8px] font-black rounded-full uppercase tracking-widest">Admin Access</div>
         </header>
 
-        <main class="flex-1 overflow-y-auto pb-24">
+        <!-- MAIN AREA -->
+        <div class="flex-1 relative bg-slate-50">
             
-            <!-- HOME TAB -->
-            <div id="home-tab" class="tab-content active p-6 space-y-6">
-                <div class="bg-gradient-to-br from-indigo-600 to-blue-700 p-8 rounded-[40px] text-white shadow-xl relative overflow-hidden">
-                    <h2 class="text-2xl font-black italic">Welcome, Scholar</h2>
-                    <p class="text-indigo-100 text-[10px] font-bold uppercase mt-1">Class 9A Hub</p>
+            <!-- HOME FEED -->
+            <div id="tab-home" class="tab-content active p-5">
+                <div class="bg-indigo-600 p-6 rounded-[30px] text-white shadow-xl mb-6 relative overflow-hidden">
+                    <div class="relative z-10">
+                        <h2 class="text-xl font-black italic">Assignments</h2>
+                        <p class="text-indigo-200 text-[9px] font-bold uppercase tracking-widest">Live Updates</p>
+                    </div>
+                    <div class="absolute -right-2 -bottom-2 text-6xl opacity-20">📂</div>
                 </div>
+                <div id="main-feed" class="space-y-4 pb-4"></div>
+            </div>
 
-                <div class="space-y-3">
-                    <h3 class="text-[10px] font-black text-slate-400 uppercase tracking-widest px-2">Live Allotments</h3>
-                    <div id="allotment-list" class="space-y-3">
-                        <div class="text-center py-4 text-slate-400 text-[10px] font-bold animate-pulse">Syncing Assignments...</div>
-                    </div>
+            <!-- CLASSROOM (Leaderboard & Subjects) -->
+            <div id="tab-classroom" class="tab-content p-5">
+                <div class="bg-indigo-100 p-5 rounded-[30px] mb-6">
+                    <h3 class="text-[10px] font-black text-indigo-600 uppercase tracking-widest mb-4 flex items-center gap-2">
+                        <span>🏆</span> Leaderboard
+                    </h3>
+                    <div id="leaderboard-list" class="space-y-2"></div>
                 </div>
+                <h3 class="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-3 ml-2">Subject NCERTs</h3>
+                <div class="grid grid-cols-2 gap-3" id="subject-grid"></div>
+            </div>
 
-                <h3 class="text-[10px] font-black text-slate-400 uppercase tracking-widest px-2">6 Main Subjects</h3>
-                <div class="grid grid-cols-2 gap-3">
-                    <div class="bg-white p-4 rounded-[25px] border border-slate-100 shadow-sm flex flex-col items-center">
-                        <div class="bg-orange-500 w-10 h-10 rounded-xl flex items-center justify-center text-white mb-2">📐</div>
-                        <span class="font-black text-[9px] uppercase">Maths</span>
-                    </div>
-                    <div class="bg-white p-4 rounded-[25px] border border-slate-100 shadow-sm flex flex-col items-center">
-                        <div class="bg-emerald-500 w-10 h-10 rounded-xl flex items-center justify-center text-white mb-2">🧪</div>
-                        <span class="font-black text-[9px] uppercase">Science</span>
-                    </div>
-                    <div class="bg-white p-4 rounded-[25px] border border-slate-100 shadow-sm flex flex-col items-center">
-                        <div class="bg-amber-700 w-10 h-10 rounded-xl flex items-center justify-center text-white mb-2">📜</div>
-                        <span class="font-black text-[9px] uppercase">SST</span>
-                    </div>
-                    <div class="bg-white p-4 rounded-[25px] border border-slate-100 shadow-sm flex flex-col items-center">
-                        <div class="bg-blue-600 w-10 h-10 rounded-xl flex items-center justify-center text-white mb-2">📖</div>
-                        <span class="font-black text-[9px] uppercase">English</span>
-                    </div>
-                    <div class="bg-white p-4 rounded-[25px] border border-slate-100 shadow-sm flex flex-col items-center">
-                        <div class="bg-rose-600 w-10 h-10 rounded-xl flex items-center justify-center text-white mb-2">🇮🇳</div>
-                        <span class="font-black text-[9px] uppercase">Hindi</span>
-                    </div>
-                    <div class="bg-white p-4 rounded-[25px] border border-slate-100 shadow-sm flex flex-col items-center">
-                        <div class="bg-indigo-700 w-10 h-10 rounded-xl flex items-center justify-center text-white mb-2">💻</div>
-                        <span class="font-black text-[9px] uppercase">Comp</span>
-                    </div>
+            <!-- CHAT -->
+            <div id="tab-chat" class="tab-content">
+                <div id="chat-msgs" class="flex-1 p-5 space-y-4 overflow-y-auto"></div>
+                <div class="p-4 border-t bg-white flex gap-2">
+                    <input id="chat-input" type="text" placeholder="Message..." class="flex-1 bg-slate-100 rounded-2xl px-5 py-4 text-sm outline-none">
+                    <button onclick="sendChat()" class="bg-indigo-600 text-white px-6 rounded-2xl font-black text-[10px] uppercase">Send</button>
                 </div>
             </div>
 
-            <!-- CHAT TAB -->
-            <div id="chat-tab" class="tab-content flex flex-col h-[75vh]">
-                <div id="chat-messages" class="flex-1 p-5 overflow-y-auto flex flex-col space-y-3">
-                    <!-- Cloud Messages -->
-                </div>
-                <div class="p-4 bg-white border-t flex gap-2 sticky bottom-0">
-                    <input id="chat-input" type="text" placeholder="Write to class..." class="flex-1 bg-slate-100 rounded-xl px-4 py-3 text-sm outline-none">
-                    <button onclick="sendMsg()" class="bg-indigo-600 text-white p-3 rounded-xl shadow-lg active:scale-90">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
-                    </button>
-                </div>
-            </div>
-
-            <!-- LEADERBOARD TAB -->
-            <div id="leader-tab" class="tab-content p-6 space-y-4">
-                <div class="bg-slate-900 p-6 rounded-[30px] text-white">
-                    <h2 class="text-xl font-black italic">Leaderboard</h2>
-                </div>
-                <div class="bg-white rounded-[30px] border border-slate-100 p-2 space-y-1">
-                    <div class="flex items-center justify-between p-4 bg-yellow-50 rounded-[20px]">
-                        <span class="font-black text-sm">1. Aryan Singh</span>
-                        <span class="text-xs font-black text-yellow-600">2,850 XP</span>
+            <!-- TEACHER ALLOT SYSTEM -->
+            <div id="tab-teacher" class="tab-content p-5">
+                <div class="bg-slate-900 p-6 rounded-[30px] text-white mb-6 relative overflow-hidden">
+                    <div class="relative z-10">
+                        <h2 class="text-xl font-black italic">Allot System</h2>
+                        <p class="text-slate-500 text-[9px] font-bold uppercase tracking-widest">Publish content to feed</p>
                     </div>
-                    <div class="flex items-center justify-between p-4">
-                        <span class="font-bold text-sm">2. Priya Sharma</span>
-                        <span class="text-xs font-bold text-slate-400">2,400 XP</span>
+                    <div class="absolute -right-4 -bottom-4 text-5xl opacity-10">✒️</div>
+                </div>
+                
+                <div class="space-y-4 bg-white p-6 rounded-[30px] border shadow-sm">
+                    <div class="flex gap-2">
+                        <button onclick="setMode('info')" id="mode-info" class="flex-1 py-3 rounded-xl text-[9px] font-black uppercase bg-indigo-600 text-white">Notice</button>
+                        <button onclick="setMode('mcq')" id="mode-mcq" class="flex-1 py-3 rounded-xl text-[9px] font-black uppercase bg-slate-100 text-slate-400">MCQ Quiz</button>
                     </div>
+
+                    <div>
+                        <label class="text-[8px] font-black text-slate-400 uppercase ml-1">Target Subject</label>
+                        <select id="t-sub" class="w-full bg-slate-50 p-4 rounded-xl font-bold text-sm outline-none ring-1 ring-slate-100 mt-1">
+                            <option>Maths</option><option>Science</option><option>SST</option><option>English</option><option>Hindi</option><option>IT</option>
+                        </select>
+                    </div>
+
+                    <div id="info-fields">
+                        <label class="text-[8px] font-black text-slate-400 uppercase ml-1">Message Body</label>
+                        <textarea id="t-text" rows="3" placeholder="Write the assignment or note here..." class="w-full bg-slate-50 p-4 rounded-xl font-bold text-sm outline-none ring-1 ring-slate-100 mt-1"></textarea>
+                    </div>
+
+                    <div id="mcq-fields" class="hidden space-y-3">
+                        <input id="q-text" type="text" placeholder="Question?" class="w-full bg-slate-50 p-4 rounded-xl font-bold text-sm ring-1 ring-slate-100">
+                        <div class="grid grid-cols-2 gap-2">
+                            <input id="opt-a" type="text" placeholder="Option A" class="bg-slate-50 p-3 rounded-xl font-bold text-[10px] ring-1 ring-slate-100">
+                            <input id="opt-b" type="text" placeholder="Option B" class="bg-slate-50 p-3 rounded-xl font-bold text-[10px] ring-1 ring-slate-100">
+                            <input id="opt-c" type="text" placeholder="Option C" class="bg-slate-50 p-3 rounded-xl font-bold text-[10px] ring-1 ring-slate-100">
+                            <input id="opt-d" type="text" placeholder="Option D" class="bg-slate-50 p-3 rounded-xl font-bold text-[10px] ring-1 ring-slate-100">
+                        </div>
+                    </div>
+
+                    <button onclick="publishToFeed()" class="w-full bg-indigo-600 text-white py-5 rounded-2xl font-black text-[10px] uppercase shadow-lg active:scale-95 transition-all">Publish to Live Feed</button>
                 </div>
             </div>
 
-            <!-- TEACHER TAB -->
-            <div id="teacher-tab" class="tab-content p-6 space-y-6">
-                <div class="bg-red-600 p-8 rounded-[40px] text-white shadow-xl">
-                    <h2 class="text-2xl font-black italic">Teacher Allot</h2>
-                </div>
-                <div class="bg-white p-6 rounded-[35px] border border-slate-100 space-y-4 shadow-sm">
-                    <select id="t-sub" class="w-full bg-slate-50 p-4 rounded-2xl outline-none font-bold text-sm border-none">
-                        <option>Maths</option><option>Science</option><option>SST</option><option>English</option><option>Hindi</option><option>Computer</option>
-                    </select>
-                    <textarea id="t-info" rows="3" placeholder="Task details..." class="w-full bg-slate-50 p-4 rounded-2xl outline-none font-bold text-sm"></textarea>
-                    <button onclick="publishToCloud()" id="pub-btn" class="w-full bg-slate-900 text-white py-5 rounded-[25px] font-black uppercase text-[10px] tracking-widest active:scale-95 transition-all">
-                        Post Live Assignment
-                    </button>
-                </div>
-            </div>
+        </div>
 
-        </main>
-
-        <!-- BOTTOM NAV -->
-        <nav class="p-4 bg-white border-t flex justify-around items-center fixed bottom-0 left-0 right-0 max-w-md mx-auto z-50">
-            <button onclick="switchTab('home')" class="nav-btn text-indigo-600"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></button>
-            <button onclick="switchTab('leader')" class="nav-btn text-slate-300"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"/><path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"/><path d="M4 22h16"/><path d="M18 2H6v7a6 6 0 0 0 12 0V2Z"/></svg></button>
-            <button onclick="switchTab('chat')" class="nav-btn text-slate-300"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></button>
-            <button id="t-nav" onclick="switchTab('teacher')" class="nav-btn text-slate-300 hidden"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10"/></svg></button>
+        <!-- NAVBAR -->
+        <nav class="h-[80px] bg-white border-t flex justify-around items-center z-[100] pb-4">
+            <button onclick="showTab('home')" id="nav-home" class="nav-active flex-1 flex justify-center py-3"><svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg></button>
+            <button onclick="showTab('classroom')" id="nav-classroom" class="text-slate-300 flex-1 flex justify-center py-3"><svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg></button>
+            <button onclick="showTab('chat')" id="nav-chat" class="text-slate-300 flex-1 flex justify-center py-3"><svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></button>
+            <button onclick="handleTeacherAccess()" id="nav-teacher" class="text-slate-300 flex-1 flex justify-center py-3"><svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10"/></svg></button>
         </nav>
     </div>
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
-        import { getFirestore, collection, addDoc, onSnapshot, query, serverTimestamp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+        import { getFirestore, collection, addDoc, onSnapshot, doc, setDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
         import { getAuth, signInAnonymously } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
 
         const firebaseConfig = JSON.parse(__firebase_config);
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
         const auth = getAuth(app);
-        const appId = typeof __app_id !== 'undefined' ? __app_id : 'neps-9a-mega';
+        const appId = typeof __app_id !== 'undefined' ? __app_id : 'neps9a-allot-v1';
+
+        const subjects = {
+            'Maths': { e: '📐', c: 'bg-orange-500', l: 'https://ncert.nic.in/textbook.php?iemh1=0-15' },
+            'Science': { e: '🧪', c: 'bg-emerald-500', l: 'https://ncert.nic.in/textbook.php?iesc1=0-15' },
+            'SST': { e: '🌍', c: 'bg-blue-800', l: 'https://ncert.nic.in/textbook.php?iess1=0-6' },
+            'English': { e: '📚', c: 'bg-blue-600', l: 'https://ncert.nic.in/textbook.php?iebe1=0-11' },
+            'Hindi': { e: '🇮🇳', c: 'bg-red-600', l: 'https://ncert.nic.in/textbook.php?ihks1=0-17' },
+            'IT': { e: '💻', c: 'bg-slate-800', l: 'https://ncert.nic.in/textbook.php?ievf1=0-10' }
+        };
+
+        let isTeacher = false;
+        let currentPin = "";
+        let teacherMode = 'info';
+        let studentData = null;
 
         async function init() {
             await signInAnonymously(auth);
-            syncContent();
+            const saved = localStorage.getItem('neps_profile_v3');
+            if(saved) {
+                studentData = JSON.parse(saved);
+                applyProfile();
+            }
+            renderSubjects();
+            syncFeed();
+            syncChat();
+            syncLeaderboard();
         }
 
-        function syncContent() {
-            // SYNC ASSIGNMENTS
-            onSnapshot(collection(db, 'artifacts', appId, 'public', 'data', 'allotments'), (snap) => {
-                const list = document.getElementById('allotment-list');
+        window.saveStudentProfile = async () => {
+            const name = document.getElementById('reg-name').value.trim();
+            const roll = document.getElementById('reg-roll').value.trim();
+            if(!name || !roll) return;
+            studentData = { name, roll, xp: 0, uid: auth.currentUser.uid };
+            localStorage.setItem('neps_profile_v3', JSON.stringify(studentData));
+            await setDoc(doc(db, 'artifacts', appId, 'public', 'data', 'students', studentData.uid), studentData);
+            applyProfile();
+        };
+
+        function applyProfile() {
+            document.getElementById('login-modal').classList.remove('modal-active');
+            document.getElementById('user-display-name').innerText = studentData.name;
+            document.getElementById('role-text').innerText = "Student | Roll: " + studentData.roll;
+            document.getElementById('user-initial').innerText = studentData.name[0].toUpperCase();
+        }
+
+        function syncLeaderboard() {
+            onSnapshot(collection(db, 'artifacts', appId, 'public', 'data', 'students'), (snap) => {
+                const list = document.getElementById('leaderboard-list');
                 list.innerHTML = "";
-                snap.docs.forEach(doc => {
-                    const data = doc.data();
-                    const el = document.createElement('div');
-                    el.className = "bg-indigo-50 border border-indigo-100 p-4 rounded-[25px] flex items-start gap-4";
-                    el.innerHTML = `<div class="bg-indigo-600 text-white p-2 rounded-xl text-xs">📝</div><div><p class="text-[9px] font-black text-indigo-600 uppercase">${data.subject}</p><p class="text-xs font-bold text-slate-700">${data.info}</p></div>`;
-                    list.prepend(el);
+                const users = snap.docs.map(d => d.data()).sort((a,b) => b.xp - a.xp);
+                users.slice(0, 3).forEach((u, i) => {
+                    const row = document.createElement('div');
+                    row.className = "flex justify-between items-center bg-white p-3 rounded-xl shadow-sm";
+                    row.innerHTML = `<span class="text-[11px] font-black">${i+1}. ${u.name}</span><span class="text-[9px] font-black text-indigo-600">${u.xp} XP</span>`;
+                    list.appendChild(row);
                 });
-            });
-
-            // SYNC CHAT
-            onSnapshot(collection(db, 'artifacts', appId, 'public', 'data', 'chat'), (snap) => {
-                const chat = document.getElementById('chat-messages');
-                chat.innerHTML = "";
-                snap.docs.forEach(doc => {
-                    const data = doc.data();
-                    const m = document.createElement('div');
-                    m.className = "chat-bubble bg-white border border-slate-100 text-slate-700 self-start text-xs shadow-sm";
-                    m.innerText = data.text;
-                    chat.appendChild(m);
-                });
-                chat.scrollTop = chat.scrollHeight;
             });
         }
 
-        window.publishToCloud = async () => {
-            const sub = document.getElementById('t-sub').value;
-            const info = document.getElementById('t-info').value;
-            if(!info) return;
-            const btn = document.getElementById('pub-btn');
-            btn.innerText = "Syncing...";
-            await addDoc(collection(db, 'artifacts', appId, 'public', 'data', 'allotments'), { subject: sub, info: info, time: serverTimestamp() });
-            btn.innerText = "Post Live Assignment";
-            document.getElementById('t-info').value = "";
-            switchTab('home');
-        };
+        function renderSubjects() {
+            const grid = document.getElementById('subject-grid');
+            grid.innerHTML = "";
+            Object.keys(subjects).forEach(s => {
+                const div = document.createElement('div');
+                div.onclick = () => window.open(subjects[s].l, '_blank');
+                div.className = "bg-white p-6 rounded-[25px] border border-slate-100 shadow-sm flex flex-col items-center cursor-pointer active:scale-95";
+                div.innerHTML = `<span class="text-3xl mb-2">${subjects[s].e}</span><span class="text-[9px] font-black uppercase">${s}</span>`;
+                grid.appendChild(div);
+            });
+        }
 
-        window.sendMsg = async () => {
-            const input = document.getElementById('chat-input');
-            if(!input.value) return;
-            await addDoc(collection(db, 'artifacts', appId, 'public', 'data', 'chat'), { text: input.value, time: serverTimestamp() });
-            input.value = "";
-        };
+        function syncFeed() {
+            onSnapshot(collection(db, 'artifacts', appId, 'public', 'data', 'feed'), (snap) => {
+                const container = document.getElementById('main-feed');
+                container.innerHTML = "";
+                const items = snap.docs.map(d => d.data()).sort((a,b) => (b.time?.seconds || 0) - (a.time?.seconds || 0));
+                items.forEach(data => {
+                    const card = document.createElement('div');
+                    card.className = "bg-white p-6 rounded-[25px] border border-slate-100 shadow-sm";
+                    if(data.type === 'mcq') {
+                        card.innerHTML = `<div class="flex gap-2 mb-3"><span class="bg-indigo-100 text-indigo-600 text-[8px] font-black px-2 py-0.5 rounded-full uppercase">Quiz Challenge</span></div><p class="text-sm font-black mb-4">${data.question}</p><div class="grid grid-cols-1 gap-2">${['A','B','C','D'].map(l => `<button class="text-left p-4 rounded-xl bg-slate-50 text-[10px] font-bold border border-slate-100">${data['opt'+l]}</button>`).join('')}</div>`;
+                    } else {
+                        card.innerHTML = `<div class="flex gap-2 mb-2"><span class="bg-emerald-100 text-emerald-600 text-[8px] font-black px-2 py-0.5 rounded-full uppercase">Allotment</span></div><p class="text-xs font-bold text-slate-600 leading-relaxed">${data.text}</p><p class="text-[8px] font-black text-slate-300 mt-3 uppercase tracking-widest">${data.subject}</p>`;
+                    }
+                    container.appendChild(card);
+                });
+            });
+        }
 
-        window.switchTab = (id) => {
+        window.showTab = (id) => {
             document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
-            document.getElementById(id + '-tab').classList.add('active');
-            document.querySelectorAll('.nav-btn').forEach(b => b.classList.replace('text-indigo-600', 'text-slate-300'));
+            document.querySelectorAll('nav button').forEach(b => b.classList.remove('nav-active', 'text-slate-300'));
+            document.getElementById('tab-' + id).classList.add('active');
+            document.getElementById('nav-' + id).classList.add('nav-active');
         };
 
-        window.unlockTeacher = () => {
-            const pin = prompt("Teacher PIN (1234):");
-            if(pin === "1234") {
-                document.getElementById('t-nav').classList.remove('hidden');
-                document.getElementById('role-text').innerText = "Administrator Mode";
-                switchTab('teacher');
+        window.handleTeacherAccess = () => {
+            if(isTeacher) return showTab('teacher');
+            document.getElementById('pin-overlay').style.display = 'flex';
+        };
+
+        window.closePin = () => { currentPin = ""; document.querySelectorAll('.pin-dot').forEach(d => d.classList.remove('filled')); document.getElementById('pin-overlay').style.display = 'none'; };
+
+        window.pressPin = (n) => {
+            if(currentPin.length >= 4) return;
+            currentPin += n;
+            document.getElementById('dot-' + (currentPin.length - 1)).classList.add('filled');
+            if(currentPin.length === 4) {
+                if(currentPin === "1234") {
+                    isTeacher = true;
+                    document.getElementById('admin-badge').classList.remove('hidden');
+                    document.getElementById('role-text').innerText = "Class Administrator";
+                    closePin();
+                    showTab('teacher');
+                } else {
+                    setTimeout(() => { currentPin = ""; document.querySelectorAll('.pin-dot').forEach(d => d.classList.remove('filled')); }, 200);
+                }
             }
         };
 
-        init();
-    </script>
-</body>
-</html>
-
- 
+        window.setMode = (m) => {
+            teacherMode = m;
+            document.getElementById('info-fields').classList.toggle('hidden', m !== 'info');
+            document.getElementById('mcq-fields').classList.toggle('hidden', m !== 'mcq');
+            document.getElementById('mode-info').className = m === 'info' ? "flex-1 py-3 rounded-xl text-[9px] font-black uppercase bg-indigo-600 text-white" : "flex-1 py-3 rounded-xl text-[9px] font-black uppercase bg-slate-100 text-slate-400";
+            document.getElementById('mode-mcq').className = m === 'mcq' ? "flex-1 py-3 rounded-xl text-[9px] font-black uppercase bg-indigo-600 text-white" : "flex-1 py-3 rounded-xl text-[9px] font
