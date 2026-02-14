@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NEPS 9A Portal</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body { -webkit-tap-highlight-color: transparent; }
+        .glass { background: rgba(255, 255, 255, 0.1); backdrop-filter: blur(10px); }
+        .card-anim { transition: all 0.2s ease; }
+        .card-anim:active { transform: scale(0.95); }
+    </style>
+</head>
+<body class="bg-slate-50 font-sans antialiased text-slate-900">
+
+    <div class="max-w-md mx-auto min-h-screen bg-white shadow-2xl flex flex-col border-x">
+        <!-- TOP HEADER -->
+        <header class="p-6 bg-white border-b flex justify-between items-center sticky top-0 z-20">
+            <div>
+                <h1 class="text-2xl font-black text-indigo-600 tracking-tighter italic">NEPS 9A</h1>
+                <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Scholar Rank #12</p>
+            </div>
+            <div class="flex items-center gap-2 bg-slate-100 px-3 py-2 rounded-2xl">
+                <span class="text-yellow-500 text-sm">⭐</span>
+                <span id="xp-val" class="font-black text-sm text-slate-700">850 XP</span>
+            </div>
+        </header>
+
+        <!-- MAIN SCROLLABLE AREA -->
+        <main class="flex-1 p-6 space-y-8 overflow-y-auto">
+            
+            <!-- WELCOME CARD -->
+            <div class="bg-indigo-600 p-8 rounded-[40px] text-white shadow-xl relative overflow-hidden">
+                <div class="relative z-10">
+                    <h2 class="text-3xl font-black italic tracking-tight">Hi Topper!</h2>
+                    <p class="text-indigo-100 text-sm mt-1 opacity-80 font-medium">Ready for your class tests?</p>
+                    <button class="mt-6 bg-white text-indigo-600 px-6 py-3 rounded-2xl font-black text-[10px] uppercase tracking-widest shadow-lg">Check Notice</button>
+                </div>
+                <!-- Decoration Circle -->
+                <div class="absolute -right-10 -top-10 w-40 h-40 bg-white opacity-10 rounded-full"></div>
+            </div>
+
+            <!-- SUBJECT GRID -->
+            <div>
+                <h3 class="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] mb-4 flex justify-between px-2">
+                    <span>Subjects</span>
+                    <span class="text-indigo-600">v1.0</span>
+                </h3>
+                <div id="subject-grid" class="grid grid-cols-2 gap-4">
+                    <!-- Cards will be added by JavaScript -->
+                </div>
+            </div>
+
+        </main>
+
+        <!-- NAVIGATION BAR -->
+        <nav class="p-6 bg-white border-t flex justify-around items-center sticky bottom-0">
+            <button class="text-indigo-600 scale-110">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+            </button>
+            <button class="text-slate-300">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+            </button>
+            <button class="text-slate-300" onclick="alert('Teacher Portal coming soon!')">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10"/></svg>
+            </button>
+        </nav>
+    </div>
+
+    <script>
+        const subjects = [
+            { name: 'Maths', color: 'bg-orange-500', icon: '📐' },
+            { name: 'Science', color: 'bg-emerald-500', icon: '🧪' },
+            { name: 'SST', color: 'bg-amber-700', icon: '📜' },
+            { name: 'English', color: 'bg-blue-600', icon: '📖' },
+            { name: 'Hindi', color: 'bg-red-600', icon: '🇮🇳' },
+            { name: 'Comp', color: 'bg-indigo-700', icon: '💻' }
+        ];
+
+        const grid = document.getElementById('subject-grid');
+        let xp = 850;
+
+        subjects.forEach(sub => {
+            const card = document.createElement('div');
+            card.className = "bg-white p-6 rounded-[35px] shadow-sm border border-slate-100 flex flex-col items-center card-anim cursor-pointer";
+            card.innerHTML = `
+                <div class="${sub.color} w-16 h-16 rounded-3xl flex items-center justify-center text-2xl text-white mb-4 shadow-lg">
+                    ${sub.icon}
+                </div>
+                <span class="font-black text-[10px] uppercase tracking-tighter text-slate-800">${sub.name}</span>
+            `;
+            card.onclick = () => {
+                xp += 10;
+                document.getElementById('xp-val').innerText = xp + " XP";
+                alert(sub.name + " test starting soon! You earned 10 XP for clicking.");
+            };
+            grid.appendChild(card);
+        });
+    </script>
+</body>
+</html>
+
