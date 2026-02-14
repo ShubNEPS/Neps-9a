@@ -1,196 +1,217 @@
-   <!DOCTYPE html>
+           <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NEPS 9A Pro</title>
+    <title>NEPS 9A Mega</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
-        body { -webkit-tap-highlight-color: transparent; }
+        body { -webkit-tap-highlight-color: transparent; scroll-behavior: smooth; }
         .tab-content { display: none; }
-        .tab-content.active { display: block; animation: fadeIn 0.3s ease-out; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        .tab-content.active { display: block; animation: fadeInUp 0.4s ease-out; }
+        @keyframes fadeInUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
         .chat-bubble { border-radius: 18px; padding: 10px 14px; margin-bottom: 8px; max-width: 85%; }
-        .rank-gold { background: linear-gradient(to right, #fbbf24, #f59e0b); }
     </style>
 </head>
-<body class="bg-slate-50 font-sans antialiased text-slate-900 overflow-x-hidden">
+<body class="bg-slate-100 font-sans antialiased text-slate-900">
 
-    <div class="max-w-md mx-auto min-h-screen bg-white shadow-2xl flex flex-col border-x relative">
+    <div class="max-w-md mx-auto min-h-screen bg-white shadow-2xl flex flex-col relative overflow-hidden">
         
         <!-- HEADER -->
-        <header class="p-5 bg-white border-b flex justify-between items-center sticky top-0 z-40">
+        <header class="p-5 bg-white border-b flex justify-between items-center sticky top-0 z-50">
             <div>
                 <h1 class="text-xl font-black text-indigo-600 italic tracking-tighter">NEPS 9A</h1>
-                <p id="sub-title" class="text-[9px] font-bold text-slate-400 uppercase tracking-widest">Student Portal</p>
+                <p id="role-text" class="text-[9px] font-bold text-slate-400 uppercase tracking-widest">Student Portal</p>
             </div>
-            <button onclick="unlockTeacher()" class="w-10 h-10 bg-slate-50 border border-slate-100 rounded-xl flex items-center justify-center text-slate-400 active:bg-indigo-50">
+            <button onclick="unlockTeacher()" class="w-10 h-10 bg-slate-50 border border-slate-200 rounded-xl flex items-center justify-center text-slate-400 active:bg-indigo-600 active:text-white transition-all">
                 <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10"/></svg>
             </button>
         </header>
 
-        <!-- CONTENT AREA -->
-        <main class="flex-1 overflow-y-auto pb-20">
+        <main class="flex-1 overflow-y-auto pb-24">
             
-            <!-- 1. HOME TAB -->
+            <!-- HOME TAB -->
             <div id="home-tab" class="tab-content active p-6 space-y-6">
-                <div class="bg-indigo-600 p-8 rounded-[40px] text-white shadow-xl relative overflow-hidden">
-                    <div class="relative z-10">
-                        <h2 class="text-2xl font-black italic tracking-tight">Top of the Class</h2>
-                        <p class="text-indigo-100 text-xs mt-1 font-medium">Class 9A Digital Dashboard</p>
-                        <div class="mt-6 flex items-center gap-2">
-                            <span class="bg-yellow-400 text-indigo-900 font-black text-[10px] px-3 py-1 rounded-full uppercase tracking-widest">850 XP</span>
-                            <span class="bg-indigo-500 text-white font-black text-[10px] px-3 py-1 rounded-full uppercase tracking-widest border border-indigo-400">Rank #12</span>
-                        </div>
-                    </div>
-                    <div class="absolute -right-6 -bottom-6 w-32 h-32 bg-white/10 rounded-full blur-2xl"></div>
+                <div class="bg-gradient-to-br from-indigo-600 to-blue-700 p-8 rounded-[40px] text-white shadow-xl relative overflow-hidden">
+                    <h2 class="text-2xl font-black italic">Welcome, Scholar</h2>
+                    <p class="text-indigo-100 text-[10px] font-bold uppercase mt-1">Class 9A Hub</p>
                 </div>
 
-                <h3 class="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] px-2">Assignments</h3>
-                <div class="grid grid-cols-2 gap-4">
-                    <div class="bg-white p-5 rounded-[30px] border border-slate-100 flex flex-col items-center shadow-sm active:scale-95 transition-all">
-                        <div class="bg-orange-500 w-12 h-12 rounded-2xl flex items-center justify-center text-white mb-2 shadow-lg">📐</div>
-                        <span class="font-bold text-[10px] uppercase">Maths</span>
-                    </div>
-                    <div class="bg-white p-5 rounded-[30px] border border-slate-100 flex flex-col items-center shadow-sm active:scale-95 transition-all">
-                        <div class="bg-emerald-500 w-12 h-12 rounded-2xl flex items-center justify-center text-white mb-2 shadow-lg">🧪</div>
-                        <span class="font-bold text-[10px] uppercase">Science</span>
-                    </div>
-                </div>
-            </div>
-
-            <!-- 2. LEADERBOARD TAB -->
-            <div id="leader-tab" class="tab-content p-6 space-y-6">
-                <div class="bg-slate-900 p-8 rounded-[40px] text-white shadow-xl">
-                    <div class="flex items-center gap-3">
-                        <div class="bg-yellow-400 p-2 rounded-xl text-slate-900">👑</div>
-                        <div>
-                            <h2 class="text-xl font-black italic tracking-tight">Leaderboard</h2>
-                            <p class="text-slate-400 text-[9px] font-bold uppercase tracking-widest">Top Performers of 9A</p>
-                        </div>
+                <div class="space-y-3">
+                    <h3 class="text-[10px] font-black text-slate-400 uppercase tracking-widest px-2">Live Allotments</h3>
+                    <div id="allotment-list" class="space-y-3">
+                        <div class="text-center py-4 text-slate-400 text-[10px] font-bold animate-pulse">Syncing Assignments...</div>
                     </div>
                 </div>
 
-                <div class="bg-white rounded-[35px] border border-slate-100 overflow-hidden shadow-sm">
-                    <div class="p-2 space-y-1" id="leader-list">
-                        <!-- Top 3 -->
-                        <div class="flex items-center justify-between p-4 bg-yellow-50 rounded-[25px]">
-                            <div class="flex items-center gap-4">
-                                <span class="w-8 h-8 flex items-center justify-center bg-yellow-400 text-white rounded-full font-black text-xs">1</span>
-                                <span class="font-black text-sm">Aryan Singh</span>
-                            </div>
-                            <span class="text-xs font-black text-yellow-600 italic">2,450 XP</span>
-                        </div>
-                        <div class="flex items-center justify-between p-4">
-                            <div class="flex items-center gap-4">
-                                <span class="w-8 h-8 flex items-center justify-center bg-slate-200 text-slate-500 rounded-full font-black text-xs">2</span>
-                                <span class="font-bold text-sm">Priya Sharma</span>
-                            </div>
-                            <span class="text-xs font-bold text-slate-400">2,100 XP</span>
-                        </div>
-                        <div class="flex items-center justify-between p-4">
-                            <div class="flex items-center gap-4">
-                                <span class="w-8 h-8 flex items-center justify-center bg-orange-100 text-orange-600 rounded-full font-black text-xs">3</span>
-                                <span class="font-bold text-sm">Rohit Mehra</span>
-                            </div>
-                            <span class="text-xs font-bold text-slate-400">1,950 XP</span>
-                        </div>
+                <h3 class="text-[10px] font-black text-slate-400 uppercase tracking-widest px-2">6 Main Subjects</h3>
+                <div class="grid grid-cols-2 gap-3">
+                    <div class="bg-white p-4 rounded-[25px] border border-slate-100 shadow-sm flex flex-col items-center">
+                        <div class="bg-orange-500 w-10 h-10 rounded-xl flex items-center justify-center text-white mb-2">📐</div>
+                        <span class="font-black text-[9px] uppercase">Maths</span>
+                    </div>
+                    <div class="bg-white p-4 rounded-[25px] border border-slate-100 shadow-sm flex flex-col items-center">
+                        <div class="bg-emerald-500 w-10 h-10 rounded-xl flex items-center justify-center text-white mb-2">🧪</div>
+                        <span class="font-black text-[9px] uppercase">Science</span>
+                    </div>
+                    <div class="bg-white p-4 rounded-[25px] border border-slate-100 shadow-sm flex flex-col items-center">
+                        <div class="bg-amber-700 w-10 h-10 rounded-xl flex items-center justify-center text-white mb-2">📜</div>
+                        <span class="font-black text-[9px] uppercase">SST</span>
+                    </div>
+                    <div class="bg-white p-4 rounded-[25px] border border-slate-100 shadow-sm flex flex-col items-center">
+                        <div class="bg-blue-600 w-10 h-10 rounded-xl flex items-center justify-center text-white mb-2">📖</div>
+                        <span class="font-black text-[9px] uppercase">English</span>
+                    </div>
+                    <div class="bg-white p-4 rounded-[25px] border border-slate-100 shadow-sm flex flex-col items-center">
+                        <div class="bg-rose-600 w-10 h-10 rounded-xl flex items-center justify-center text-white mb-2">🇮🇳</div>
+                        <span class="font-black text-[9px] uppercase">Hindi</span>
+                    </div>
+                    <div class="bg-white p-4 rounded-[25px] border border-slate-100 shadow-sm flex flex-col items-center">
+                        <div class="bg-indigo-700 w-10 h-10 rounded-xl flex items-center justify-center text-white mb-2">💻</div>
+                        <span class="font-black text-[9px] uppercase">Comp</span>
                     </div>
                 </div>
             </div>
 
-            <!-- 3. CHAT TAB -->
-            <div id="chat-tab" class="tab-content flex flex-col h-[75vh] bg-slate-50">
+            <!-- CHAT TAB -->
+            <div id="chat-tab" class="tab-content flex flex-col h-[75vh]">
                 <div id="chat-messages" class="flex-1 p-5 overflow-y-auto flex flex-col space-y-3">
-                    <div class="chat-bubble bg-white text-slate-700 self-start border border-slate-200 text-sm shadow-sm">
-                        <p class="text-[9px] font-black text-indigo-500 mb-1 uppercase">Monitor</p>
-                        Hey guys! Check the Leaderboard, the ranks just updated.
-                    </div>
+                    <!-- Cloud Messages -->
                 </div>
-                <div class="p-4 bg-white border-t flex gap-2">
-                    <input id="chat-input" type="text" placeholder="Type message..." class="flex-1 bg-slate-100 rounded-2xl px-4 py-3 text-sm outline-none font-medium">
-                    <button onclick="sendMsg()" class="bg-indigo-600 text-white p-3 rounded-2xl shadow-lg active:scale-90 transition-transform">
+                <div class="p-4 bg-white border-t flex gap-2 sticky bottom-0">
+                    <input id="chat-input" type="text" placeholder="Write to class..." class="flex-1 bg-slate-100 rounded-xl px-4 py-3 text-sm outline-none">
+                    <button onclick="sendMsg()" class="bg-indigo-600 text-white p-3 rounded-xl shadow-lg active:scale-90">
                         <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
                     </button>
                 </div>
             </div>
 
-            <!-- 4. TEACHER TAB -->
+            <!-- LEADERBOARD TAB -->
+            <div id="leader-tab" class="tab-content p-6 space-y-4">
+                <div class="bg-slate-900 p-6 rounded-[30px] text-white">
+                    <h2 class="text-xl font-black italic">Leaderboard</h2>
+                </div>
+                <div class="bg-white rounded-[30px] border border-slate-100 p-2 space-y-1">
+                    <div class="flex items-center justify-between p-4 bg-yellow-50 rounded-[20px]">
+                        <span class="font-black text-sm">1. Aryan Singh</span>
+                        <span class="text-xs font-black text-yellow-600">2,850 XP</span>
+                    </div>
+                    <div class="flex items-center justify-between p-4">
+                        <span class="font-bold text-sm">2. Priya Sharma</span>
+                        <span class="text-xs font-bold text-slate-400">2,400 XP</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- TEACHER TAB -->
             <div id="teacher-tab" class="tab-content p-6 space-y-6">
                 <div class="bg-red-600 p-8 rounded-[40px] text-white shadow-xl">
-                    <h2 class="text-xl font-black italic">Teacher Console</h2>
-                    <p class="text-red-100 text-[10px] font-bold uppercase tracking-widest mt-1">Class Management</p>
+                    <h2 class="text-2xl font-black italic">Teacher Allot</h2>
                 </div>
-
-                <div class="bg-white p-6 rounded-[35px] shadow-sm border border-slate-100 space-y-4">
-                    <h3 class="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-2 px-2">Assign New Task</h3>
-                    <input id="test-sub" type="text" placeholder="Subject Name" class="w-full bg-slate-50 p-4 rounded-2xl outline-none font-bold text-sm">
-                    <textarea id="test-info" rows="3" placeholder="Task description..." class="w-full bg-slate-50 p-4 rounded-2xl outline-none font-bold text-sm"></textarea>
-                    <button onclick="postTest()" class="w-full bg-slate-900 text-white py-4 rounded-2xl font-black uppercase text-[10px] tracking-widest shadow-xl active:scale-95 transition-all">
-                        Publish to 9A
+                <div class="bg-white p-6 rounded-[35px] border border-slate-100 space-y-4 shadow-sm">
+                    <select id="t-sub" class="w-full bg-slate-50 p-4 rounded-2xl outline-none font-bold text-sm border-none">
+                        <option>Maths</option><option>Science</option><option>SST</option><option>English</option><option>Hindi</option><option>Computer</option>
+                    </select>
+                    <textarea id="t-info" rows="3" placeholder="Task details..." class="w-full bg-slate-50 p-4 rounded-2xl outline-none font-bold text-sm"></textarea>
+                    <button onclick="publishToCloud()" id="pub-btn" class="w-full bg-slate-900 text-white py-5 rounded-[25px] font-black uppercase text-[10px] tracking-widest active:scale-95 transition-all">
+                        Post Live Assignment
                     </button>
                 </div>
             </div>
 
         </main>
 
-        <!-- BOTTOM NAVIGATION -->
-        <nav class="p-4 bg-white/80 backdrop-blur-lg border-t flex justify-around items-center fixed bottom-0 left-0 right-0 max-w-md mx-auto z-50">
-            <button onclick="switchTab('home')" class="nav-btn p-2 text-indigo-600 transition-all"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></button>
-            <button onclick="switchTab('leader')" class="nav-btn p-2 text-slate-300 transition-all"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"/><path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"/><path d="M4 22h16"/><path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22"/><path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22"/><path d="M18 2H6v7a6 6 0 0 0 12 0V2Z"/></svg></button>
-            <button onclick="switchTab('chat')" class="nav-btn p-2 text-slate-300 transition-all"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></button>
-            <button id="t-nav" onclick="switchTab('teacher')" class="nav-btn p-2 text-slate-300 transition-all hidden"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10"/></svg></button>
+        <!-- BOTTOM NAV -->
+        <nav class="p-4 bg-white border-t flex justify-around items-center fixed bottom-0 left-0 right-0 max-w-md mx-auto z-50">
+            <button onclick="switchTab('home')" class="nav-btn text-indigo-600"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></button>
+            <button onclick="switchTab('leader')" class="nav-btn text-slate-300"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"/><path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"/><path d="M4 22h16"/><path d="M18 2H6v7a6 6 0 0 0 12 0V2Z"/></svg></button>
+            <button onclick="switchTab('chat')" class="nav-btn text-slate-300"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></button>
+            <button id="t-nav" onclick="switchTab('teacher')" class="nav-btn text-slate-300 hidden"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10"/></svg></button>
         </nav>
     </div>
 
-    <script>
-        function switchTab(id) {
-            document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
-            document.querySelectorAll('.nav-btn').forEach(b => b.classList.replace('text-indigo-600', 'text-slate-300'));
-            
-            document.getElementById(id + '-tab').classList.add('active');
-            event.currentTarget.classList.replace('text-slate-300', 'text-indigo-600');
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+        import { getFirestore, collection, addDoc, onSnapshot, query, serverTimestamp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+        import { getAuth, signInAnonymously } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+
+        const firebaseConfig = JSON.parse(__firebase_config);
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+        const auth = getAuth(app);
+        const appId = typeof __app_id !== 'undefined' ? __app_id : 'neps-9a-mega';
+
+        async function init() {
+            await signInAnonymously(auth);
+            syncContent();
         }
 
-        function unlockTeacher() {
+        function syncContent() {
+            // SYNC ASSIGNMENTS
+            onSnapshot(collection(db, 'artifacts', appId, 'public', 'data', 'allotments'), (snap) => {
+                const list = document.getElementById('allotment-list');
+                list.innerHTML = "";
+                snap.docs.forEach(doc => {
+                    const data = doc.data();
+                    const el = document.createElement('div');
+                    el.className = "bg-indigo-50 border border-indigo-100 p-4 rounded-[25px] flex items-start gap-4";
+                    el.innerHTML = `<div class="bg-indigo-600 text-white p-2 rounded-xl text-xs">📝</div><div><p class="text-[9px] font-black text-indigo-600 uppercase">${data.subject}</p><p class="text-xs font-bold text-slate-700">${data.info}</p></div>`;
+                    list.prepend(el);
+                });
+            });
+
+            // SYNC CHAT
+            onSnapshot(collection(db, 'artifacts', appId, 'public', 'data', 'chat'), (snap) => {
+                const chat = document.getElementById('chat-messages');
+                chat.innerHTML = "";
+                snap.docs.forEach(doc => {
+                    const data = doc.data();
+                    const m = document.createElement('div');
+                    m.className = "chat-bubble bg-white border border-slate-100 text-slate-700 self-start text-xs shadow-sm";
+                    m.innerText = data.text;
+                    chat.appendChild(m);
+                });
+                chat.scrollTop = chat.scrollHeight;
+            });
+        }
+
+        window.publishToCloud = async () => {
+            const sub = document.getElementById('t-sub').value;
+            const info = document.getElementById('t-info').value;
+            if(!info) return;
+            const btn = document.getElementById('pub-btn');
+            btn.innerText = "Syncing...";
+            await addDoc(collection(db, 'artifacts', appId, 'public', 'data', 'allotments'), { subject: sub, info: info, time: serverTimestamp() });
+            btn.innerText = "Post Live Assignment";
+            document.getElementById('t-info').value = "";
+            switchTab('home');
+        };
+
+        window.sendMsg = async () => {
+            const input = document.getElementById('chat-input');
+            if(!input.value) return;
+            await addDoc(collection(db, 'artifacts', appId, 'public', 'data', 'chat'), { text: input.value, time: serverTimestamp() });
+            input.value = "";
+        };
+
+        window.switchTab = (id) => {
+            document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+            document.getElementById(id + '-tab').classList.add('active');
+            document.querySelectorAll('.nav-btn').forEach(b => b.classList.replace('text-indigo-600', 'text-slate-300'));
+        };
+
+        window.unlockTeacher = () => {
             const pin = prompt("Teacher PIN (1234):");
             if(pin === "1234") {
                 document.getElementById('t-nav').classList.remove('hidden');
-                document.getElementById('sub-title').innerText = "Teacher Mode Enabled";
-                alert("Teacher Menu unlocked in navigation bar!");
+                document.getElementById('role-text').innerText = "Administrator Mode";
+                switchTab('teacher');
             }
-        }
+        };
 
-        function postTest() {
-            const sub = document.getElementById('test-sub').value;
-            const info = document.getElementById('test-info').value;
-            if(!sub || !info) return alert("Fill both fields!");
-
-            const chat = document.getElementById('chat-messages');
-            const alertMsg = document.createElement('div');
-            alertMsg.className = "bg-red-50 p-5 rounded-3xl border border-red-100 text-red-600 text-center mb-4 w-full shadow-sm";
-            alertMsg.innerHTML = `<p class="text-[10px] font-black uppercase tracking-widest mb-1">🚨 NEW ALLOTMENT</p><p class="font-black text-sm italic">${sub}</p><p class="text-slate-500 text-xs mt-1 font-medium">${info}</p>`;
-            chat.appendChild(alertMsg);
-
-            alert("Assignment successfully posted to the class chat!");
-            document.getElementById('test-sub').value = "";
-            document.getElementById('test-info').value = "";
-            switchTab('chat');
-        }
-
-        function sendMsg() {
-            const input = document.getElementById('chat-input');
-            if(!input.value) return;
-            const chat = document.getElementById('chat-messages');
-            const m = document.createElement('div');
-            m.className = "chat-bubble bg-indigo-600 text-white self-end text-sm rounded-tr-none shadow-md";
-            m.innerText = input.value;
-            chat.appendChild(m);
-            input.value = "";
-            chat.scrollTop = chat.scrollHeight;
-        }
+        init();
     </script>
 </body>
 </html>
 
-             
+ 
